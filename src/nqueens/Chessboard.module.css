@@ -1,0 +1,41 @@
+* {
+    padding: 0;
+    margin: 0;
+    border: 0;
+  }
+  
+  :root {
+    --board-size: 400px;
+    --dimension: 4;
+    --font-size: 1.5rem;
+  }
+  
+  
+  .board{
+    display: grid;
+    grid-template-columns: repeat( var(--dimension), calc(var(--board-size)/var(--dimension)));
+    position: relative;
+    width: var(--board-size);
+    height: var(--board-size);
+    border: 2px solid blue;
+  }
+  
+  .queen{
+    max-height:100%; 
+    max-width:100%;
+  }
+  
+  
+  .cell{
+    width: calc(var(--board-size)/var(--dimension) );
+    height: calc(var(--board-size)/var(--dimension) );
+  }
+  
+  .blackcell {
+    background-color: green;
+  }
+  
+  .whitecell{
+    background-color:bisque;
+  }
+  
