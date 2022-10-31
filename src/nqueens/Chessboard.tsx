@@ -8,19 +8,43 @@ class Cell extends React.Component<any, any>{
   constructor(props : any) {
     super(props);
     this.state = {
+      index: 0,
       color: 'white', // Cell color
       queen : false, // If queen above or not
-    };
+      selected : false,
+      handleClick : () => {},
+    }; 
+  }
+
+  selectColor(color : string) : string{
+    if(color === 'white'){
+      return styles.whitecell;
+    }
+    return styles.blackcell;  
+  }
+
+  onCellClick(){
+    if(this.props.queen){
+      this.props.handleClick();
+    }
   }
 
   render() {
     const queen = require('./queen.png');
     return (
-      <div className={ [styles.cell , this.props.color === 'white' ? styles.whitecell : styles.blackcell ].join(" ") }> 
-        {
-          this.props.queen ? <img className={styles.queen} src={queen} /> : <div/>
-        }
-      </div>
+      
+        <div className={ [ styles.cell , this.selectColor(this.props.color)].join(" ") }> 
+          <button 
+          className={ [styles.cellButton , this.props.selected  ? styles.selectedLayer : '' ].join(" ") } 
+          onClick={ () => this.onCellClick() }>
+            {
+              this.props.queen ? <img className={styles.queen} src={queen} /> : <div/>
+            }
+
+          </button>
+
+        </div>
+      
 
     );
   }
@@ -30,67 +54,130 @@ class Cell extends React.Component<any, any>{
 
 class Board extends React.Component<any, any>{
   
+
+
   constructor(props : any) {
     super(props);
     this.state = {
       n_queens: 0, // number of queens == dimension (n*n)
       queens: Array(10).fill(1), // each pos is a row, each value in a row is a col
-      
+      hover_cells : new Array(this.props.n_queens*this.props.n_queens).fill(false), 
        // for refs cells
     };
   }
   
+  handleClick(cell_index : number){
+    let board_size : number = this.props.n_queens;
+    
+    let y : number = Math.floor( (cell_index)/ (board_size  ) ) ; 
+    let x : number = cell_index%board_size;
+
+
+    console.log(cell_index ," ",  x ,", ", y, " - " ,board_size);
+    let new_cells = new Array(board_size*board_size).fill(false);
+    // Fill row (x)
+    for(let i :number = 0; i < board_size; i++){
+      new_cells[board_size*y + i] = true;
+    }
+    // Fill column (y)
+    for(let i :number= 0; i < board_size; i++){
+      new_cells[board_size*i + x] = true;
+    }
+
+
+    // For (\) diagonals
+    if(x <= y){
+      let base_y = y - x; // Initial y
+      for(let i :number = 0; i < (board_size - base_y); i++){
+        
+       new_cells[ (base_y*board_size) + (board_size + 1)*i  ] = true;
+      }
+    }
+    else{
+      let base_x = x - y; // Initial y
+      for(let i :number = 0; i < (board_size - base_x); i++){
+        
+        new_cells[ (base_x) + (board_size + 1)*i  ] = true;
+      }
+    }
+
+     // Initial y
+
+    // For (/) diagonals
+    if(x + y < board_size){
+      let base_x = x + y; // Initial y
+      for(let i :number = 0; i < (base_x + 1); i++){
+        
+        new_cells[ board_size*(i) + (base_x - i)  ] = true;
+      }
+    }
+    else{
+      let base_x =  x + (board_size - 1 - x); // Initial y
+      let base_y = y - (board_size - 1 - x)
+      for(let i :number = 0; i < (board_size - base_y); i++){
+        new_cells[ board_size*(base_y + i) + (base_x - i)  ] = true;
+      }
+    }
+
+
+
+
+
+    this.setState({hover_cells: new_cells});
+  }
+
   
-  renderCell(color : string, has_queen : boolean){
+  renderCell(index : number, color : string, has_queen : boolean){
     return(
-      <Cell color={color} queen={has_queen}/>
+      <Cell 
+      index={index} 
+      color={color} 
+      queen={has_queen} 
+      selected={ this.state.hover_cells[index] }
+      handleClick = {() => this.handleClick(index) }
+      />
     );
   }
 
-
-
   createBoard(){
-    //this.props.queens = Array(this.props.n_queens).fill(null);
-    //this.props.cells = Array(this.props.n_queens*this.props.n_queens).fill(null);
 
-
-
+    
     let root = document.documentElement;
     root.style.setProperty('--dimension', this.props.n_queens);
     let arr = [];
-    
     for (let i=0;i< this.props.n_queens; i++){
       let temp = [];
       for (let j=0;j< this.props.n_queens;j++){
+
+
         let has_queen = false;
+
+
         if( this.props.queens[i] === j ){
           has_queen = true;
         }
+
+
+
         if ((i+j)%2){// Black cell
 
-          let new_cell = this.renderCell('black', has_queen);
+          let new_cell = this.renderCell(this.props.n_queens*i + j,'black', has_queen);
           temp.push( new_cell );
         }
         else { // White cell
-          let new_cell = this.renderCell('white', has_queen);
+          let new_cell = this.renderCell(this.props.n_queens*i + j, 'white', has_queen);
           temp.push( new_cell );
 
         }
       }
       arr.push(temp);
     }
-
-
-
-
     return arr;
   }
 
   render(){
     return this.createBoard();
   }
-
-
 
 }
 

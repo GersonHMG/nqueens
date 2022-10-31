@@ -13,6 +13,7 @@
   
   .board{
     display: grid;
+    margin: auto;
     grid-template-columns: repeat( var(--dimension), calc(var(--board-size)/var(--dimension)));
     position: relative;
     width: var(--board-size);
@@ -24,18 +25,32 @@
     max-height:100%; 
     max-width:100%;
   }
+
+  .queen:hover{
+    cursor: pointer;
+  }
   
   
   .cell{
     width: calc(var(--board-size)/var(--dimension) );
     height: calc(var(--board-size)/var(--dimension) );
   }
-  
+
+  .cellButton{
+    width: 100%;
+    height: 100%;
+    background-color: transparent;
+  }
+
   .blackcell {
-    background-color: green;
+    background-color: rgb(46, 46, 46);
   }
   
   .whitecell{
-    background-color:bisque;
+    background-color:rgb(209, 187, 160);
   }
-  
+
+  .selectedLayer{
+    background-color: rgba(0, 237, 115, 0.523);
+  }
+
