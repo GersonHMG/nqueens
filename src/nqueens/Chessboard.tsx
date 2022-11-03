@@ -1,7 +1,8 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import styles from './Chessboard.module.css';
 import { BackTracking } from "../algorithms/BackTracking";
 import { IsValid } from "./NQueensConstraints";
+import { clear } from 'console';
 
 class Cell extends React.Component<any, any>{
 
@@ -54,6 +55,7 @@ class Cell extends React.Component<any, any>{
 
 class Board extends React.Component<any, any>{
   
+  
 
 
   constructor(props : any) {
@@ -101,8 +103,6 @@ class Board extends React.Component<any, any>{
       }
     }
 
-     // Initial y
-
     // For (/) diagonals
     if(x + y < board_size){
       let base_x = x + y; // Initial y
@@ -119,10 +119,6 @@ class Board extends React.Component<any, any>{
       }
     }
 
-
-
-
-
     this.setState({hover_cells: new_cells});
   }
 
@@ -134,14 +130,22 @@ class Board extends React.Component<any, any>{
       color={color} 
       queen={has_queen} 
       selected={ this.state.hover_cells[index] }
+
+
+
       handleClick = {() => this.handleClick(index) }
       />
     );
   }
 
-  createBoard(){
 
-    
+  clearSelections(){
+    const clear_cells = new Array(this.props.n_queens*this.props.n_queens).fill(false);
+    this.setState({hover_cells : clear_cells});
+  }
+
+
+  createBoard(){
     let root = document.documentElement;
     root.style.setProperty('--dimension', this.props.n_queens);
     let arr = [];
@@ -199,13 +203,21 @@ function Solve(n_queens : number) : number[] {
 const Chessboard = () => {
   const [dimension, setDimension] = useState(0);
   const [solution, setSolution] = useState<number[]>([]);
+  const refContainer = useRef<Board>(null);
 
   const relative_size = {
     gridTemplateColumns: "repeat( " + dimension + ", " + 400/dimension + "px)",
     
   }
 
+  
+
+
   const checkInput = (value : string) => {
+    //Board.resetBoard();
+    if(refContainer.current != null)
+      refContainer.current.clearSelections();
+
     setSolution([])
     let new_value = parseInt(value);
     if(new_value < 90){
@@ -233,7 +245,7 @@ const Chessboard = () => {
       
       <div className={styles.board} style={ relative_size } >
 
-        <Board n_queens={dimension} queens={ solution } />
+        <Board ref={refContainer} n_queens={dimension} queens={ solution }  />
       </div>
 
       <button onClick={ () => computeSolution(dimension) } > Solve </button>
@@ -241,5 +253,6 @@ const Chessboard = () => {
     </div>
   )
 }
+
 
 export default Chessboard
