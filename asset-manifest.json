@@ -1,0 +1,16 @@
+{
+  "files": {
+    "main.css": "/nqueens/static/css/main.023cf009.css",
+    "main.js": "/nqueens/static/js/main.3f048de1.js",
+    "static/js/787.0996761e.chunk.js": "/nqueens/static/js/787.0996761e.chunk.js",
+    "static/media/queen.png": "/nqueens/static/media/queen.d46628d81f31b62b4f0b.png",
+    "index.html": "/nqueens/index.html",
+    "main.023cf009.css.map": "/nqueens/static/css/main.023cf009.css.map",
+    "main.3f048de1.js.map": "/nqueens/static/js/main.3f048de1.js.map",
+    "787.0996761e.chunk.js.map": "/nqueens/static/js/787.0996761e.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.023cf009.css",
+    "static/js/main.3f048de1.js"
+  ]
+}
