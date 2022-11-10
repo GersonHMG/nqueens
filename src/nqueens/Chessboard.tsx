@@ -2,6 +2,7 @@ import React, {useState, useEffect, useRef} from 'react';
 import styles from './Chessboard.module.css';
 import { BackTracking } from "../algorithms/BackTracking";
 import { IsValid } from "./NQueensConstraints";
+import { SolvePolynomialTime } from './NQueensPolynomial';
 import { clear } from 'console';
 
 class Cell extends React.Component<any, any>{
@@ -74,8 +75,6 @@ class Board extends React.Component<any, any>{
     let y : number = Math.floor( (cell_index)/ (board_size  ) ) ; 
     let x : number = cell_index%board_size;
 
-
-    console.log(cell_index ," ",  x ,", ", y, " - " ,board_size);
     let new_cells = new Array(board_size*board_size).fill(false);
     // Fill row (x)
     for(let i :number = 0; i < board_size; i++){
@@ -185,16 +184,7 @@ class Board extends React.Component<any, any>{
 
 }
 
-function Solve(n_queens : number) : number[] {
-  let solver = new BackTracking(
-      Array.from(Array(n_queens).keys()),
-      IsValid,
-      n_queens
-  );
-  let solution = solver.solve();
-  console.log("La solucion es: ", solution);
-  return solution;
-}
+
 
 
 
@@ -225,11 +215,37 @@ const Chessboard = () => {
     }
   }
 
-  const computeSolution = ( n : number) => {
-    let new_solution : number[] = Solve(n);
+  const computeSolution = ( n : number, method : string) => {
+    let new_solution : number[] = [];
+    if (method == "backtracking"){
+      new_solution = SolveBacktracking(n);
+    }
+    else if( method == "qs1"){
+      new_solution = SolveQS1(n);
+    }
     setSolution(new_solution);
 
   }
+
+
+  function SolveBacktracking(n_queens : number) : number[] {
+    let solver = new BackTracking(
+        Array.from(Array(n_queens).keys()),
+        IsValid,
+        n_queens
+    );
+    
+    let solution = solver.solve();
+    console.log("La solucion es: ", solution);
+    return solution;
+  }
+
+  function SolveQS1(n_queens : number) : number[]{
+      let solver = new SolvePolynomialTime();
+      let solution = solver.trySolve(n_queens, Array.from(Array(n_queens).keys())  );
+      console.log("La solucion es: ", solution);
+      return solution;
+    }
 
 
   return ( 
@@ -248,8 +264,9 @@ const Chessboard = () => {
         <Board ref={refContainer} n_queens={dimension} queens={ solution }  />
       </div>
 
-      <button onClick={ () => computeSolution(dimension) } > Solve </button>
-
+      <button onClick={ () => computeSolution(dimension,"backtracking" ) } > Solve with Backtracking </button>
+      <button onClick={ () => computeSolution(dimension, "qs1") } > Solve with QS1 </button>
+    
     </div>
   )
 }
