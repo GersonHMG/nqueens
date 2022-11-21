@@ -30,3 +30,4 @@ Until now only 2 algorithms have been implemented:
 - [X] Queens attack positions
 - [ ] Diplay number of iterations
 - [ ] Visualize the algorithms
+- [ ] Responsive
