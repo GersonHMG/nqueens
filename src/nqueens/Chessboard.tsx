@@ -251,7 +251,7 @@ const Chessboard = () => {
   return ( 
     
     <div>
-      <div>
+      <div className={styles.center}>
         <h2>
           <span>N x N </span> 
           ChessBoard
@@ -264,9 +264,10 @@ const Chessboard = () => {
         <Board ref={refContainer} n_queens={dimension} queens={ solution }  />
       </div>
 
-      <button onClick={ () => computeSolution(dimension,"backtracking" ) } > Solve with Backtracking </button>
-      <button onClick={ () => computeSolution(dimension, "qs1") } > Solve with QS1 </button>
-    
+    <div className={styles.center}>
+      <button className={styles.button} onClick={ () => computeSolution(dimension,"backtracking" ) } > Solve with Backtracking </button>
+      <button className={styles.button} onClick={ () => computeSolution(dimension, "qs1") } > Solve with QS1 </button>
+      </div>
     </div>
   )
 }
