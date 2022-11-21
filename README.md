@@ -1,5 +1,5 @@
 This project is for educational purposes only. 
-LIVE -> (DEPLOY)[https://gerssonn.github.io/nqueens/]
+Live deploy -> [Click here](https://gerssonn.github.io/nqueens/)
 
 
 ## About NQueens
