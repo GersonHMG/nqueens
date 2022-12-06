@@ -1,5 +1,4 @@
-This project is for educational purposes only. 
-Live deploy -> [Click here](https://gerssonn.github.io/nqueens/)
+This project is for educational purposes only. [Live deploy](https://gerssonn.github.io/nqueens/)
 
 
 ## About NQueens
